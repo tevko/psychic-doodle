@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
 
 body {
   display: flex;
@@ -11,5 +12,10 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background-color: #2a2a2f;
+  background-color: #E7E5DF;
+  font-family: 'Roboto', sans-serif;
+}
+
+.logo {
+  max-width: 575px;
 }

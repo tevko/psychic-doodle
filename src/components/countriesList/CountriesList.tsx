@@ -23,7 +23,7 @@ const CountriesList = () => {
     async function loadAndStoreCountries() {
       const data: CountriesInterface = await getCountries();
       setCountries(data);
-      setLoading(true);
+      setLoading(false);
     }
     loadAndStoreCountries();
   }, []);
@@ -35,7 +35,7 @@ const CountriesList = () => {
             <CountryRow
               key={country.alpha2Code}
               capital={country.capital}
-              name={country.capital}
+              name={country.name}
               alpha2Code={country.alpha2Code}
             />
           ))}

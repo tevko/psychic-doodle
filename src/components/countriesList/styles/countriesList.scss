@@ -1,3 +1,40 @@
+.countriesList {
+  margin-top: 1em;
+  font-size: 1em;
+  max-height: 50vh;
+  overflow: scroll;
+  color: #393E41;
+  padding-top: 1em;
+  background-color: #ec1b60;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 575px;
+  height: 600px;
+
+  &_Row {
+    display: flex;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: solid 1px #E7BB41;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+      margin: 0;
+      flex: 33%;
+      font-weight: 300;
+
+      &:last-child {
+        text-align: right;
+      }
+
+      &:nth-child(2n) {
+        text-align: center;
+      }
+    }
+  }
+}
+
 .countriesList_spinner {
   --size: 62px;
 
@@ -6,6 +43,9 @@
 
   border-radius: 50%;
   perspective: 800px;
+  margin: 0 auto;
+  margin-top: 2em;
+  margin-bottom: 2em;
 
   &--inner {
     position: absolute;
@@ -19,7 +59,7 @@
       left: 0;
       top: 0;
       animation: rotate-one 1s linear infinite;
-      border-bottom: 3px solid #2cfffe;
+      border-bottom: 3px solid #fcc10f;
     }
 
     &.--two {
@@ -33,7 +73,7 @@
       right: 0;
       bottom: 0;
       animation: rotate-three 1s linear infinite;
-      border-top: 3px solid #ec1b60;
+      border-top: 3px solid #fcc10f;
     }
 
     @keyframes rotate-one {

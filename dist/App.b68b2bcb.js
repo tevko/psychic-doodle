@@ -30073,8 +30073,11 @@ var CountryRow = function CountryRow(_a) {
       name = _a.name,
       alpha2Code = _a.alpha2Code;
   return _react.default.createElement("div", {
-    className: "CountryRow"
-  }, capital, name, alpha2Code);
+    className: "countriesList_Row"
+  }, _react.default.createElement("p", null, name), _react.default.createElement("p", null, capital), _react.default.createElement("p", null, _react.default.createElement("img", {
+    "data-src": "https://www.countryflags.io/" + alpha2Code + "/flat/64.png",
+    src: ""
+  })));
 };
 
 var _default = CountryRow;
@@ -30282,7 +30285,7 @@ var CountriesList = function CountriesList() {
             case 1:
               data = _a.sent();
               setCountries(data);
-              setLoading(true);
+              setLoading(false);
               return [2
               /*return*/
               ];
@@ -30299,7 +30302,7 @@ var CountriesList = function CountriesList() {
     return _react.default.createElement(_CountryRow.default, {
       key: country.alpha2Code,
       capital: country.capital,
-      name: country.capital,
+      name: country.name,
       alpha2Code: country.alpha2Code
     });
   }));
@@ -30307,7 +30310,9 @@ var CountriesList = function CountriesList() {
 
 var _default = CountriesList;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./styles/countriesList.scss":"src/components/countriesList/styles/countriesList.scss","./services/getCountries":"src/components/countriesList/services/getCountries.tsx","./CountryRow":"src/components/countriesList/CountryRow.tsx"}],"src/App.tsx":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./styles/countriesList.scss":"src/components/countriesList/styles/countriesList.scss","./services/getCountries":"src/components/countriesList/services/getCountries.tsx","./CountryRow":"src/components/countriesList/CountryRow.tsx"}],"src/title_logo.png":[function(require,module,exports) {
+module.exports = "/title_logo.7841c6be.png";
+},{}],"src/App.tsx":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -30318,10 +30323,15 @@ require("./styles/main.scss");
 
 var _CountriesList = _interopRequireDefault(require("./components/countriesList/CountriesList"));
 
+var _title_logo = _interopRequireDefault(require("./title_logo.png"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom.default.render(_react.default.createElement(_CountriesList.default, null), document.querySelector('main'));
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./styles/main.scss":"src/styles/main.scss","./components/countriesList/CountriesList":"src/components/countriesList/CountriesList.tsx"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+_reactDom.default.render(_react.default.createElement(_react.default.Fragment, null, _react.default.createElement("img", {
+  className: "logo",
+  src: _title_logo.default
+}), _react.default.createElement(_CountriesList.default, null)), document.querySelector('main'));
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./styles/main.scss":"src/styles/main.scss","./components/countriesList/CountriesList":"src/components/countriesList/CountriesList.tsx","./title_logo.png":"src/title_logo.png"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
