@@ -30056,7 +30056,37 @@ var getCountries = function getCountries() {
 
 var _default = getCountries;
 exports.default = _default;
-},{"../constants":"src/components/countriesList/constants/index.ts"}],"src/components/countriesList/CountryRow.tsx":[function(require,module,exports) {
+},{"../constants":"src/components/countriesList/constants/index.ts"}],"src/components/countriesList/utilities/useIntersectionOberver.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var useIntersectionObserver = function useIntersectionObserver(_a) {
+  var isIntersectingCallback = _a.isIntersectingCallback,
+      unObserveAfterIntersect = _a.unObserveAfterIntersect,
+      root = _a.root;
+  var objectObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        isIntersectingCallback(entry);
+
+        if (unObserveAfterIntersect) {
+          objectObserver.unobserve(entry.target);
+        }
+      }
+    });
+  }, {
+    root: root
+  });
+  return objectObserver;
+};
+
+var _default = useIntersectionObserver;
+exports.default = _default;
+},{}],"src/components/countriesList/CountryRow.tsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30089,6 +30119,34 @@ var CountryRow = function CountryRow(_a) {
 
 var _default = CountryRow;
 exports.default = _default;
+},{"react":"node_modules/react/index.js"}],"src/components/countriesList/LoadingSpinner.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LoadingSpinner = function LoadingSpinner() {
+  return (// I literally stole this from codepen - https://codepen.io/siropkin/pen/ZEpwKVX
+    _react.default.createElement("div", {
+      className: "countriesList_spinner"
+    }, _react.default.createElement("div", {
+      className: "countriesList_spinner--inner --one"
+    }), _react.default.createElement("div", {
+      className: "countriesList_spinner--inner --two"
+    }), _react.default.createElement("div", {
+      className: "countriesList_spinner--inner --three"
+    }))
+  );
+};
+
+var _default = LoadingSpinner;
+exports.default = _default;
 },{"react":"node_modules/react/index.js"}],"src/components/countriesList/CountriesList.tsx":[function(require,module,exports) {
 "use strict";
 
@@ -30103,7 +30161,11 @@ require("./styles/countriesList.scss");
 
 var _getCountries = _interopRequireDefault(require("./services/getCountries"));
 
+var _useIntersectionOberver = _interopRequireDefault(require("./utilities/useIntersectionOberver"));
+
 var _CountryRow = _interopRequireDefault(require("./CountryRow"));
+
+var _LoadingSpinner = _interopRequireDefault(require("./LoadingSpinner"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30254,16 +30316,10 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
   }
 };
 
-var LoadingSpinner = // I literally stole this from codepen - https://codepen.io/siropkin/pen/ZEpwKVX
-_react.default.createElement("div", {
-  className: "countriesList_spinner"
-}, _react.default.createElement("div", {
-  className: "countriesList_spinner--inner --one"
-}), _react.default.createElement("div", {
-  className: "countriesList_spinner--inner --two"
-}), _react.default.createElement("div", {
-  className: "countriesList_spinner--inner --three"
-}));
+// tells component what action to perform when an image comes into view
+var isIntersectingCallback = function isIntersectingCallback(entry) {
+  entry.target.setAttribute('src', entry.target.getAttribute('data-src'));
+};
 
 var CountriesList = function CountriesList() {
   var countriesContainer = (0, _react.useRef)(null);
@@ -30307,21 +30363,13 @@ var CountriesList = function CountriesList() {
       });
     }
 
-    loadAndStoreCountries();
-  }, []);
-  (0, _react.useEffect)(function () {
-    // create intersection observer for icon loading
-    var imgObeserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.setAttribute('src', entry.target.getAttribute('data-src'));
-          imgObeserver.unobserve(entry.target);
-        }
-      });
-    }, {
-      root: countriesContainer.current
+    var imgObserver = (0, _useIntersectionOberver.default)({
+      isIntersectingCallback: isIntersectingCallback,
+      root: countriesContainer.current,
+      unObserveAfterIntersect: true
     });
-    setObserver(imgObeserver);
+    setObserver(imgObserver);
+    loadAndStoreCountries();
     return function () {
       return observer.disconnect();
     };
@@ -30329,7 +30377,7 @@ var CountriesList = function CountriesList() {
   return _react.default.createElement("div", {
     className: "countriesList",
     ref: countriesContainer
-  }, isLoading && observer ? LoadingSpinner : countries.map(function (country) {
+  }, isLoading ? _react.default.createElement(_LoadingSpinner.default, null) : countries.map(function (country) {
     return _react.default.createElement(_CountryRow.default, {
       key: country.alpha2Code,
       capital: country.capital,
@@ -30342,7 +30390,7 @@ var CountriesList = function CountriesList() {
 
 var _default = CountriesList;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./styles/countriesList.scss":"src/components/countriesList/styles/countriesList.scss","./services/getCountries":"src/components/countriesList/services/getCountries.tsx","./CountryRow":"src/components/countriesList/CountryRow.tsx"}],"src/title_logo.png":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./styles/countriesList.scss":"src/components/countriesList/styles/countriesList.scss","./services/getCountries":"src/components/countriesList/services/getCountries.tsx","./utilities/useIntersectionOberver":"src/components/countriesList/utilities/useIntersectionOberver.tsx","./CountryRow":"src/components/countriesList/CountryRow.tsx","./LoadingSpinner":"src/components/countriesList/LoadingSpinner.tsx"}],"src/title_logo.png":[function(require,module,exports) {
 module.exports = "/title_logo.7841c6be.png";
 },{}],"src/App.tsx":[function(require,module,exports) {
 "use strict";
