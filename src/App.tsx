@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Countries from './components/countries/Countries';
+import CountriesList from './components/countriesList/CountriesList';
 
-ReactDOM.render(<Countries />, document.querySelector('main'));
+ReactDOM.render(<CountriesList />, document.querySelector('main'));
