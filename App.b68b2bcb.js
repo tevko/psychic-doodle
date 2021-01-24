@@ -29772,7 +29772,84 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"src/components/countriesList/constants/index.ts":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"src/styles/main.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"src/components/countriesList/styles/countriesList.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"src/components/countriesList/constants/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29979,7 +30056,30 @@ var getCountries = function getCountries() {
 
 var _default = getCountries;
 exports.default = _default;
-},{"../constants":"src/components/countriesList/constants/index.ts"}],"src/components/countriesList/CountriesList.tsx":[function(require,module,exports) {
+},{"../constants":"src/components/countriesList/constants/index.ts"}],"src/components/countriesList/CountryRow.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CountryRow = function CountryRow(_a) {
+  var capital = _a.capital,
+      name = _a.name,
+      alpha2Code = _a.alpha2Code;
+  return _react.default.createElement("div", {
+    className: "CountryRow"
+  }, capital, name, alpha2Code);
+};
+
+var _default = CountryRow;
+exports.default = _default;
+},{"react":"node_modules/react/index.js"}],"src/components/countriesList/CountriesList.tsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29989,7 +30089,11 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+require("./styles/countriesList.scss");
+
 var _getCountries = _interopRequireDefault(require("./services/getCountries"));
+
+var _CountryRow = _interopRequireDefault(require("./CountryRow"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30140,6 +30244,17 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
   }
 };
 
+var LoadingSpinner = // I literally stole this from codepen - https://codepen.io/siropkin/pen/ZEpwKVX
+_react.default.createElement("div", {
+  className: "countriesList_spinner"
+}, _react.default.createElement("div", {
+  className: "countriesList_spinner--inner --one"
+}), _react.default.createElement("div", {
+  className: "countriesList_spinner--inner --two"
+}), _react.default.createElement("div", {
+  className: "countriesList_spinner--inner --three"
+}));
+
 var CountriesList = function CountriesList() {
   var _a = (0, _react.useState)(true),
       isLoading = _a[0],
@@ -30167,7 +30282,7 @@ var CountriesList = function CountriesList() {
             case 1:
               data = _a.sent();
               setCountries(data);
-              setLoading(false);
+              setLoading(true);
               return [2
               /*return*/
               ];
@@ -30178,24 +30293,35 @@ var CountriesList = function CountriesList() {
 
     loadAndStoreCountries();
   }, []);
-  return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h1", null, "Hello"), countries[0].name);
+  return _react.default.createElement("div", {
+    className: "countriesList"
+  }, isLoading ? LoadingSpinner : countries.map(function (country) {
+    return _react.default.createElement(_CountryRow.default, {
+      key: country.alpha2Code,
+      capital: country.capital,
+      name: country.capital,
+      alpha2Code: country.alpha2Code
+    });
+  }));
 };
 
 var _default = CountriesList;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./services/getCountries":"src/components/countriesList/services/getCountries.tsx"}],"src/App.tsx":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./styles/countriesList.scss":"src/components/countriesList/styles/countriesList.scss","./services/getCountries":"src/components/countriesList/services/getCountries.tsx","./CountryRow":"src/components/countriesList/CountryRow.tsx"}],"src/App.tsx":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
+require("./styles/main.scss");
+
 var _CountriesList = _interopRequireDefault(require("./components/countriesList/CountriesList"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom.default.render(_react.default.createElement(_CountriesList.default, null), document.querySelector('main'));
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./components/countriesList/CountriesList":"src/components/countriesList/CountriesList.tsx"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./styles/main.scss":"src/styles/main.scss","./components/countriesList/CountriesList":"src/components/countriesList/CountriesList.tsx"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
