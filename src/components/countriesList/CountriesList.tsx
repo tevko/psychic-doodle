@@ -3,16 +3,14 @@ import React, { useEffect, useState, useRef } from 'react';
 import './styles/countriesList.scss';
 import { CountriesInterface } from './constants/interfaces';
 import getCountries from './services/getCountries';
+import useIntersectionObserver from './utilities/useIntersectionOberver';
 import CountryRow from './CountryRow';
+import LoadingSpinner from './LoadingSpinner';
 
-const LoadingSpinner = (
-  // I literally stole this from codepen - https://codepen.io/siropkin/pen/ZEpwKVX
-  <div className="countriesList_spinner">
-    <div className="countriesList_spinner--inner --one"></div>
-    <div className="countriesList_spinner--inner --two"></div>
-    <div className="countriesList_spinner--inner --three"></div>
-  </div>
-);
+// tells component what action to perform when an image comes into view
+const isIntersectingCallback = (entry) => {
+  entry.target.setAttribute('src', entry.target.getAttribute('data-src'));
+};
 
 const CountriesList = () => {
   const countriesContainer = useRef(null);
@@ -27,42 +25,31 @@ const CountriesList = () => {
       setCountries(data);
       setLoading(false);
     }
+    const imgObserver = useIntersectionObserver({
+      isIntersectingCallback,
+      root: countriesContainer.current,
+      unObserveAfterIntersect: true,
+    });
+    setObserver(imgObserver);
     loadAndStoreCountries();
-  }, []);
-  useEffect(() => {
-    // create intersection observer for icon loading
-    const imgObeserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.setAttribute(
-              'src',
-              entry.target.getAttribute('data-src')
-            );
-            imgObeserver.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        root: countriesContainer.current,
-      }
-    );
-    setObserver(imgObeserver);
     return () => observer.disconnect();
   }, []);
+
   return (
     <div className="countriesList" ref={countriesContainer}>
-      {isLoading && observer
-        ? LoadingSpinner
-        : countries.map((country) => (
-            <CountryRow
-              key={country.alpha2Code}
-              capital={country.capital}
-              name={country.name}
-              alpha2Code={country.alpha2Code}
-              observer={observer}
-            />
-          ))}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        countries.map((country) => (
+          <CountryRow
+            key={country.alpha2Code}
+            capital={country.capital}
+            name={country.name}
+            alpha2Code={country.alpha2Code}
+            observer={observer}
+          />
+        ))
+      )}
     </div>
   );
 };
