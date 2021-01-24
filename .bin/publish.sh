@@ -1,6 +1,6 @@
 #!/.bin/
 echo "Sending up to Github Pages 🚀"
-git checkout master
+git checkout main
 rm -rf dist
 npx parcel build index.html --public-url ./ --no-cache 
 git add dist 
