@@ -30107,8 +30107,12 @@ var CountryRow = function CountryRow(_a) {
       alpha2Code = _a.alpha2Code,
       observer = _a.observer;
   var rowElem = (0, _react.useRef)(null);
-  (0, _react.useEffect)(function () {
-    observer.observe(rowElem.current);
+  (0, _react.useLayoutEffect)(function () {
+    // using layoutEffect instead of useEffect to insure a.) the ref is filled and b.) no poor UI side effects since intersectionObserver is modifying the DOM
+    // https://kentcdodds.com/blog/useeffect-vs-uselayouteffect
+    if (rowElem && rowElem.current) {
+      observer.observe(rowElem.current);
+    }
   }, []);
   return _react.default.createElement("div", {
     className: "countriesList_Row"
@@ -30319,13 +30323,18 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
 
 // tells component what action to perform when an image comes into view
 var isIntersectingCallback = function isIntersectingCallback(entry) {
-  entry.target.setAttribute('src', entry.target.getAttribute('data-src'));
+  var target = entry.target;
+  var dataSrc = target.getAttribute('data-src');
+
+  if (dataSrc) {
+    target.setAttribute('src', dataSrc);
+  }
 };
 
 var CountriesList = function CountriesList() {
   var countriesContainer = (0, _react.useRef)(null);
 
-  var _a = (0, _react.useState)({}),
+  var _a = (0, _react.useState)(undefined),
       observer = _a[0],
       setObserver = _a[1];
 
@@ -30364,15 +30373,20 @@ var CountriesList = function CountriesList() {
       });
     }
 
-    var imgObserver = (0, _useIntersectionOberver.default)({
-      isIntersectingCallback: isIntersectingCallback,
-      root: countriesContainer.current,
-      unObserveAfterIntersect: true
-    });
-    setObserver(imgObserver);
+    if (countriesContainer && countriesContainer.current) {
+      var imgObserver = (0, _useIntersectionOberver.default)({
+        isIntersectingCallback: isIntersectingCallback,
+        root: countriesContainer.current,
+        unObserveAfterIntersect: true
+      });
+      setObserver(imgObserver);
+    }
+
     loadAndStoreCountries();
     return function () {
-      return observer.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
     };
   }, []);
   return _react.default.createElement("div", {
