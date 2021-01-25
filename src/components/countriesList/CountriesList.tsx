@@ -8,13 +8,17 @@ import CountryRow from './CountryRow';
 import LoadingSpinner from './LoadingSpinner';
 
 // tells component what action to perform when an image comes into view
-const isIntersectingCallback = (entry) => {
-  entry.target.setAttribute('src', entry.target.getAttribute('data-src'));
+const isIntersectingCallback = (entry: IntersectionObserverEntry) => {
+  const target = entry.target;
+  const dataSrc = target.getAttribute('data-src');
+  if (dataSrc) {
+    target.setAttribute('src', dataSrc);
+  }
 };
 
 const CountriesList = () => {
-  const countriesContainer = useRef(null);
-  const [observer, setObserver] = useState({});
+  const countriesContainer = useRef<HTMLDivElement>(null);
+  const [observer, setObserver] = useState(undefined);
   const [isLoading, setLoading] = useState(true);
   const [countries, setCountries] = useState([
     { name: '', capital: '', alpha2Code: '' },
@@ -25,14 +29,20 @@ const CountriesList = () => {
       setCountries(data);
       setLoading(false);
     }
-    const imgObserver = useIntersectionObserver({
-      isIntersectingCallback,
-      root: countriesContainer.current,
-      unObserveAfterIntersect: true,
-    });
-    setObserver(imgObserver);
+    if (countriesContainer && countriesContainer.current) {
+      const imgObserver = useIntersectionObserver({
+        isIntersectingCallback,
+        root: countriesContainer.current,
+        unObserveAfterIntersect: true,
+      });
+      setObserver(imgObserver);
+    }
     loadAndStoreCountries();
-    return () => observer.disconnect();
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, []);
 
   return (

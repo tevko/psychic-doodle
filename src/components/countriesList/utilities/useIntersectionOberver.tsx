@@ -1,4 +1,6 @@
-const useIntersectionObserver = ({
+import { useIntersectionObserverProps } from '../constants/types';
+
+const useIntersectionObserver: useIntersectionObserverProps = ({
   isIntersectingCallback,
   unObserveAfterIntersect,
   root,
