@@ -17,8 +17,8 @@ const isIntersectingCallback = (entry: IntersectionObserverEntry) => {
 };
 
 const CountriesList = () => {
-  const countriesContainer = useRef<HTMLDivElement>(null);
-  const [observer, setObserver] = useState(undefined);
+  const countriesContainer = useRef<HTMLDivElement | null>(null);
+  const [observer, setObserver] = useState<IntersectionObserver | null>(null);
   const [isLoading, setLoading] = useState(true);
   const [countries, setCountries] = useState([
     { name: '', capital: '', alpha2Code: '' },

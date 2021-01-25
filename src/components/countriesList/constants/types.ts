@@ -2,7 +2,7 @@ export type CountryRowProps = {
   capital: string;
   name: string;
   alpha2Code: string;
-  observer: IntersectionObserver;
+  observer: IntersectionObserver | null;
 };
 
 export type useIntersectionObserverProps = (arg0: {

@@ -12,7 +12,7 @@ const CountryRow: FunctionComponent<CountryRowProps> = ({
   useLayoutEffect(() => {
     // using layoutEffect instead of useEffect to insure a.) the ref is filled and b.) no poor UI side effects since intersectionObserver is modifying the DOM
     // https://kentcdodds.com/blog/useeffect-vs-uselayouteffect
-    if (rowElem && rowElem.current) {
+    if (rowElem && rowElem.current && observer) {
       observer.observe(rowElem.current);
     }
   }, []);
