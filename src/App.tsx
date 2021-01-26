@@ -7,7 +7,7 @@ import logo from './title_logo.png';
 
 ReactDOM.render(
   <>
-    <img className="logo" src={logo} />
+    <img width="575" height="307" className="logo" src={logo} />
     <CountriesList />
   </>,
   document.querySelector('main')

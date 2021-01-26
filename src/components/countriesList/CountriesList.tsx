@@ -50,6 +50,7 @@ const CountriesList = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
+        // for a larger list, https://www.npmjs.com/package/react-window would make sense here
         countries.map((country) => (
           <CountryRow
             key={country.alpha2Code}

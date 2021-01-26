@@ -23,6 +23,8 @@ const CountryRow: FunctionComponent<CountryRowProps> = ({
       <p>
         <img
           ref={rowElem}
+          width="64"
+          height="64"
           // we don't want to populate all the images at once. Let's lazyload them!
           data-src={`https://www.countryflags.io/${alpha2Code}/flat/64.png`}
         />
@@ -31,4 +33,4 @@ const CountryRow: FunctionComponent<CountryRowProps> = ({
   );
 };
 
-export default CountryRow;
+export default React.memo(CountryRow);
