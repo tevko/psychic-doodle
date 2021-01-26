@@ -17,7 +17,7 @@ const CountryRow: FunctionComponent<CountryRowProps> = ({
     }
   }, []);
   return (
-    <div className="countriesList_Row">
+    <li className="countriesList_Row">
       <p>{name}</p>
       <p>{capital}</p>
       <p>
@@ -27,7 +27,7 @@ const CountryRow: FunctionComponent<CountryRowProps> = ({
           data-src={`https://www.countryflags.io/${alpha2Code}/flat/64.png`}
         />
       </p>
-    </div>
+    </li>
   );
 };
 

@@ -17,7 +17,7 @@ const isIntersectingCallback = (entry: IntersectionObserverEntry) => {
 };
 
 const CountriesList = () => {
-  const countriesContainer = useRef<HTMLDivElement | null>(null);
+  const countriesContainer = useRef<HTMLUListElement | null>(null);
   const [observer, setObserver] = useState<IntersectionObserver | null>(null);
   const [isLoading, setLoading] = useState(true);
   const [countries, setCountries] = useState([
@@ -46,7 +46,7 @@ const CountriesList = () => {
   }, []);
 
   return (
-    <div className="countriesList" ref={countriesContainer}>
+    <ul className="countriesList" ref={countriesContainer}>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -60,7 +60,7 @@ const CountriesList = () => {
           />
         ))
       )}
-    </div>
+    </ul>
   );
 };
 
