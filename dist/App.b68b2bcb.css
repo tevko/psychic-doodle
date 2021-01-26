@@ -26,7 +26,7 @@ body {
   font-size: 1em;
   max-height: 50vh;
   overflow: scroll;
-  color: #393E41;
+  color: #27292b;
   padding-top: 1em;
   background-color: #ec1b60;
   padding-left: 1em;
@@ -39,7 +39,7 @@ body {
   display: flex;
   margin-bottom: 1em;
   padding-bottom: 1em;
-  border-bottom: solid 1px #E7BB41;
+  border-bottom: solid 1px #fff;
   justify-content: space-between;
   align-items: center;
   min-height: 85px;
